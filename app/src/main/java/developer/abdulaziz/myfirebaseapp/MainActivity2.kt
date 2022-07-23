@@ -150,6 +150,8 @@ class MainActivity2 : AppCompatActivity() {
                     resentCode(n)
                     countTime = 60
                     binding.reset.visibility = View.INVISIBLE
+                    if (countTime <= 9) binding.time.text = "00:0$countTime"
+                    else binding.time.text = "00:$countTime"
                 }
             }
         }
