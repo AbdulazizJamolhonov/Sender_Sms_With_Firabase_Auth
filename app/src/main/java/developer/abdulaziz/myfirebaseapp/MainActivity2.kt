@@ -22,13 +22,14 @@ class MainActivity2 : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var storedVerificationId: String
     private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
-    private val n = MyObject.number
+    private var n = MyObject.number
     private lateinit var handler: Handler
     private var countTime = 60
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMain2Binding.inflate(layoutInflater)
         setContentView(binding.root)
+        MyObject.init(this)
     }
 
     override fun onResume() {
@@ -86,15 +87,12 @@ class MainActivity2 : AppCompatActivity() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(this, "Successful", Toast.LENGTH_SHORT).show()
+                    val list = MyObject.list
+                    list.clear()
+                    list.add(MyObject.number)
+                    MyObject.list = list
                     startActivity(Intent(this, MainActivity3::class.java))
                     finish()
-                } else {
-                    Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
-                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                        Toast.makeText(this, "You entered the wrong code!!!", Toast.LENGTH_SHORT)
-                            .show()
-                    }
                 }
             }
     }
@@ -148,7 +146,7 @@ class MainActivity2 : AppCompatActivity() {
                 binding.reset.visibility = View.VISIBLE
                 binding.reset.setOnClickListener {
                     resentCode(n)
-                    countTime = 60
+                    countTime = 59
                     binding.reset.visibility = View.INVISIBLE
                     if (countTime <= 9) binding.time.text = "00:0$countTime"
                     else binding.time.text = "00:$countTime"

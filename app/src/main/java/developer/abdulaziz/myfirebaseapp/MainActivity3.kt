@@ -10,6 +10,7 @@ class MainActivity3 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMain3Binding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.number.text = MyObject.number
+        MyObject.init(this)
+        binding.number.text = MyObject.list[0]
     }
 }
